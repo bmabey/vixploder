@@ -1,19 +1,27 @@
 set nocompatible                "Put in VIM mode, not vi...standard vi is too old-school, even for me
 
+colorscheme desert
+if has("gui_running")
+"	colorscheme darkblue2
+  set guifont=Monaco:h14.00
+  set columns=243
+  set lines=37
+endif
+
 " This is a hacked method of determining the platform we are on...
 let s:platform = system("uname")
 let s:on_linux = s:platform =~? "linux"
 let s:on_mac   = has('macunix') || s:platform =~? 'Darwin'
 
 "-------- Terminal setup
-set term=xterm-256color
+"set term=xterm-256color
 
-set t_Co=256                    "Set terminal to 256 colors
+"set t_Co=256                    "Set terminal to 256 colors
 
 "-------- Syntax & coloring
 syntax on                       "Turns on syntax highlighting...SHOULD BE AFTER 't_Co' & 'term' declarations
 "colorscheme railscasts         "disabling until I get it linux-compatible
-colorscheme rubyblue
+"colorscheme rubyblue
 
 
 " Some of this was taken from or added to from the 'vimrc_example.vim' file
@@ -94,7 +102,7 @@ set foldmethod=syntax               "Syntax highlighting items specify folds
 set foldtext=getline(v:foldstart)   "Set text displayed in "foldbar" when code is folded
 set fillchars=fold:\                "Fill foldline "empty space" with...empty spaces (instead of default "-" character)
 set foldcolumn=1                    "Sets width of "foldcolumn" on left of screen used to display foldstatus indicators
-set foldlevel=1                     "Folds below 1-level. Class/Module-level definitions expanded...all others folded by default
+set foldlevel=3                     "Folds below 1-level. Class/Module-level definitions expanded...all others folded by default
 
 "-------- Tabs
 set softtabstop=2       "Tabs are 2-spaces...using instead of 'tabstop' as per:
@@ -185,19 +193,39 @@ set cursorline                  "Highlights the line the cursor is currently on.
 " to be explicit. Mappings which include "<leader>" would start with this
 " charachter. For example. "map <leader>f <some_command>" would create a mapping for
 " \-f (backslash-f) to '<some_command>'
-let mapleader='\'
+let mapleader=','
 
+
+" Allow for moving between windows using <CTRL>+normal vim movement keys (h j k l)
 "Switch to the next "higher" windows with <C-K>
 noremap <C-J> <C-W>j<C-W>_
-
 "Switch to the next "higher" windows with <C-J>
 noremap <C-K> <C-W>k<C-W>_
 
+map <C-H> <C-W>h
+map <C-L> <C-W>l
+" Allow for quicker management of windows
+" close current split
+map <C-C> <C-W>c
+
+" swap splits
+map <C-X> <C-W>x
+
+" focus current split (close all other splits)
+map <C-O> <C-W>o
+
+
 "Hide the highlighted search results with "?"
-noremap ? :nohlsearch<CR>
+"noremap ? :nohlsearch<CR>
 
 "Set up TextMate-like cmd-T file searching using <leader>-f ('backslash'-f)
-noremap <leader>f :FuzzyFinderTextMate<CR>
+noremap <leader>t :FuzzyFinderTextMate<CR>
+map <leader>r :ruby finder.rescan!<CR>
+let g:fuzzy_matching_limit = 20
+ 
+" FuzzyFinder Buffer
+map ,b :FuzzyFinderBuffer<CR>
+
 
 "Toggle NERDTree window using F3 key
 noremap <F3> :NERDTreeToggle<CR>
@@ -214,7 +242,7 @@ let g:fuzzy_ignore='*.log'
 " If we are in a Rails app, just search across the app, lib, config, spec, and test
 " directories
 if filereadable(expand('./vendor'))
-  let g:fuzzy_roots=['app', 'lib', 'config', 'spec', 'test']
+  let g:fuzzy_roots=['app', 'lib', 'config', 'spec', 'test', 'features']
 endif
 
 "-------- Most Recently Used File (MRU) plugin mapping & config
@@ -256,6 +284,62 @@ abbreviate lorem Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestib
 
 "Typing 'hh' will give you a '=>'
 abbreviate hh =>
+imap <C-l> <Space>=><Space>
+
+" RSpec and Ruby abbreviations...
+iabbrev it,, it "should" do<CR>end<UP><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT>
+iabbrev des,, describe "" do<CR><CR>end<UP><UP><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><BS>
+iabbrev giv,, # given<CR><LEFT><BS><LEFT>
+iabbrev exp,, # expect<CR><LEFT><BS><LEFT>
+iabbrev the,, # then<CR><LEFT><BS><LEFT>
+iabbrev whe,, # when<CR><LEFT><BS><LEFT>
+iabbrev dbg require 'ruby-debug'; Debugger.start; debugger
+
+
+" shortcuts to rails.vim alternate-file commands
+map <leader>ae :A<CR>
+map <leader>av :AV<CR>
+map <leader>as :AS<CR>
+
+map <leader>ev :e ~/.vimrc<CR>
+
+" Compile and view latex document
+map <leader>lp \ll<CR>\lv<CR>
+
+" Move up and down lines regardless of formatting (move within line wraps)
+nnoremap j gj
+nnoremap k gk
+
+" http://blog.ant0ine.com/2007/03/ack_and_vim_integration.html
+" use :cc, :cp, :cn to navigate to the results
+set grepprg=ack
+map <leader>f :Ack 
+
+" Set viewers for latex formats
+" let g:Tex_ViewRule_dvi    'xdvi'
+" let g:Tex_ViewRule_ps     'ghostview'
+if s:on_mac
+  let Tex_ViewRuleComplete_pdf = '/usr/bin/open -a Preview $*.pdf' 
+end
+
+" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
+" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
+" The following changes the default filetype back to 'tex':
+let g:tex_flavor='latex'
+
+
+function! s:ToggleScratch()
+  if expand('%') == g:ScratchBufferName
+    quit
+  else
+    Sscratch
+  endif
+endfunction
+
+map ,s :call <SID>ToggleScratch()<CR>
+
+" delete all buffers
+map bda :bufdo bd<CR>
 
 "-------- Local Overrides
 "If you have options you'd like to override locally for

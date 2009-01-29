@@ -1,30 +1,111 @@
-# Subversion
-alias up='svn up --ignore-externals'
+# Misc. System
+alias ep="vim ~/.bash_profile && source ~/.bash_profile"
+alias essh="vim ~/.ssh/config"
+alias gh='history | grep'
+alias ll='ls -lah'
+alias b='cd ..'
+alias grep='GREP_COLOR="1;37;41" LANG=C grep --color=auto -n'
 
-# Git
-#alias gd='git diff | opendiff'
+# Subversion
+alias 7up='svn up --ignore-externals'
+
+#Git aliases
+alias gd='git diff | vim'
 alias gst='git status'
 alias gl='git pull'
 alias gp='git push'
 alias gc='git commit -v'
+alias ginfo='git-info'
 alias gca='git commit -v -a'
 alias gb='git branch'
 alias gba='git branch -a'
-alias ga='git add'
-alias g='git'
+alias gbd='git branch -d'
+alias gbn='git checkout -b '
+alias ga='alias | grep git'
+alias gma='git co master'
+alias gco='git checkout '
+alias gm='git merge '
+alias gmd='git merge $1 && git branch -d'
+alias gk='gitk &'
+#alias gs='git stash'
+alias gsl='git stash list'
+#alias gsa='git stash apply'
+alias gt='git tag'
 
+function git_create_tracking_branch {
+  git branch --track $1 origin/$1 && git checkout $1
+}
+alias gbt='git_create_tracking_branch'
+
+# Checks a given tag out into branch named the same thing
+function git_tag_checkout {
+	git checkout -b $1 $1
+}
+alias gtco='git_tag_checkout'
+
+
+#git-svn
+alias gsci='git-svn dcommit'
+alias gsup='git-svn rebase'
 # Common command aliases
-alias vil='vi $_'
+alias vil='vim $_'
 
-# Rails
+# Ruby & Rails
 alias ss='./script/server --debugger'
 alias sas='./script/autospec'
 alias sc='./script/console'
 alias sg='./script/generate'
+alias dbr="rake db:drop && rake db:create && rake db:migrate && rake db:test:prepare"
+alias rr="rake routes | grep"
+alias rt="rake -T | grep"
+alias rc="rake cruise:dev"
+alias cuc="cucumber"
+
+function lri {
+ qri $1 | less -R
+}
+
+
+#gem functions and aliases
+export GEMDIR=`gem env gemdir`
+
+gemdoc() {
+  open $GEMDIR/doc/`$(which ls) $GEMDIR/doc | grep $1 | sort | tail -1`/rdoc/index.html
+}
+
+gemcode() {
+	pushd $GEMDIR/gems/$1
+	mvim .
+	popd
+}
+
+cdgem() {
+	cd $GEMDIR/gems/$1
+}
+
+gemtmp() {
+  gem install -i /tmp/gems $1
+  mvim /tmp/gems/
+}
+
+
+#complete from http://stephencelis.com/archive/2008/6/bashfully-yours-gem-shortcuts
+_gemdocomplete() {
+  COMPREPLY=($(compgen -W '$(`which ls` $GEMDIR/doc)' -- ${COMP_WORDS[COMP_CWORD]}))
+  return 0
+}
+
+complete -o default -o nospace -F _gemdocomplete gemdoc
+complete -o default -o nospace -F _gemdocomplete gemcode
+complete -o default -o nospace -F _gemdocomplete cdgem
+
 
 # Textmate alias that will be rmeoved after we determine that it
 # is inferior to vim/vi
 alias mr='mate app config db features lib public test spec vendor/plugins vendor/gems'
+
+#Erlang aliases
+alias eman='erl -man '
 
 # Load ~/.local_aliases file if it exists & is readable
 [ -r ~/.local_aliases ] && . ~/.local_aliases
