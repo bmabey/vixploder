@@ -102,7 +102,7 @@ set foldmethod=syntax               "Syntax highlighting items specify folds
 set foldtext=getline(v:foldstart)   "Set text displayed in "foldbar" when code is folded
 set fillchars=fold:\                "Fill foldline "empty space" with...empty spaces (instead of default "-" character)
 set foldcolumn=1                    "Sets width of "foldcolumn" on left of screen used to display foldstatus indicators
-set foldlevel=3                     "Folds below 1-level. Class/Module-level definitions expanded...all others folded by default
+set foldlevel=9                     "Folds below 1-level. Class/Module-level definitions expanded...all others folded by default
 
 "-------- Tabs
 set softtabstop=2       "Tabs are 2-spaces...using instead of 'tabstop' as per:
