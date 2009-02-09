@@ -1,5 +1,6 @@
 # Misc. System
 alias ep="vim ~/.bash_profile && source ~/.bash_profile"
+alias ea="vim ~/.aliases && source ~/.aliases"
 alias essh="vim ~/.ssh/config"
 alias gh='history | grep'
 alias ll='ls -lah'
@@ -10,7 +11,9 @@ alias grep='GREP_COLOR="1;37;41" LANG=C grep --color=auto -n'
 alias 7up='svn up --ignore-externals'
 
 #Git aliases
-alias gd='git diff | vim'
+alias gd='git diff'
+alias gsu='git submodule init'
+alias gsu='git submodule update'
 alias gst='git status'
 alias gl='git pull'
 alias gp='git push'
@@ -31,6 +34,7 @@ alias gk='gitk &'
 alias gsl='git stash list'
 #alias gsa='git stash apply'
 alias gt='git tag'
+alias grc='git rebase --continue'
 
 function git_create_tracking_branch {
   git branch --track $1 origin/$1 && git checkout $1
