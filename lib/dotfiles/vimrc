@@ -1,12 +1,14 @@
 set nocompatible                "Put in VIM mode, not vi...standard vi is too old-school, even for me
 
-colorscheme desert
+"colorscheme desert
 if has("gui_running")
 "	colorscheme darkblue2
   set guifont=Monaco:h14.00
   set columns=243
   set lines=37
 endif
+"hi Normal guibg=#1e2021  " for some reason this isn't being set in my colorscheme...
+"hi Normal guibg=white  " for some reason this isn't being set in my colorscheme...
 
 " This is a hacked method of determining the platform we are on...
 let s:platform = system("uname")
@@ -69,29 +71,29 @@ if has("autocmd")
 endif " has("audocmd")
 
 "Arrow-key mappings, for the 'unconverted' ;-)
-if s:on_linux
-  " Up
-  set t_ku=OA
-  " Down
-  set t_kd=OB
-  " Right
-  set t_kr=OC
-  " Left
-  set t_kl=OD
-elseif s:on_mac
-  " Up
-  set t_ku=[A
-  " Down
-  set t_kd=[B
-  " Right
-  set t_kr=[C
-  " Left
-  set t_kl=[D
-endif
+"if s:on_linux
+  "" Up
+  "set t_ku=OA
+  "" Down
+  "set t_kd=OB
+  "" Right
+  "set t_kr=OC
+  "" Left
+  "set t_kl=OD
+"elseif s:on_mac
+  "" Up
+  "set t_ku=[A
+  "" Down
+  "set t_kd=[B
+  "" Right
+  "set t_kr=[C
+  "" Left
+  "set t_kl=[D
+"endif
 
 
 "-------- Folding
-set foldmethod=syntax               "Syntax highlighting items specify folds
+"set foldmethod=syntax               "Syntax highlighting items specify folds
 
 "Not sure how I feel about these two yet
 "Commenting out...probably not 'sane default' people would expect. Leaving 
@@ -99,10 +101,10 @@ set foldmethod=syntax               "Syntax highlighting items specify folds
 "set foldopen=all                    "Auto-opens folds on all possible 'autocmds'
 "set foldclose=all                   "Auto-closes folds on all possible autocmds
 
-set foldtext=getline(v:foldstart)   "Set text displayed in "foldbar" when code is folded
-set fillchars=fold:\                "Fill foldline "empty space" with...empty spaces (instead of default "-" character)
-set foldcolumn=1                    "Sets width of "foldcolumn" on left of screen used to display foldstatus indicators
-set foldlevel=9                     "Folds below 1-level. Class/Module-level definitions expanded...all others folded by default
+"set foldtext=getline(v:foldstart)   "Set text displayed in "foldbar" when code is folded
+"set fillchars=fold:\                "Fill foldline "empty space" with...empty spaces (instead of default "-" character)
+"set foldcolumn=1                    "Sets width of "foldcolumn" on left of screen used to display foldstatus indicators
+"set foldlevel=9                     "Folds below 1-level. Class/Module-level definitions expanded...all others folded by default
 
 "-------- Tabs
 set softtabstop=2       "Tabs are 2-spaces...using instead of 'tabstop' as per:
@@ -117,6 +119,7 @@ set softtabstop=2       "Tabs are 2-spaces...using instead of 'tabstop' as per:
 set shiftwidth=2        "Number of spaces to use for each step of (auto)indent
 set expandtab           "Replace "tab" characters with the number of  spaces defined
                         " by "tabstop" (aka: "soft tabs")
+set tabstop=2
 
 set smarttab            "When on, a <Tab> in front of a line inserts blanks according to 'shiftwidth'.  'tabstop'
                         " or 'softtabstop' is used in other places
@@ -155,7 +158,7 @@ set listchars=tab:>-,trail:.  "Strings to use in 'list' mode.
                               "           "tab:>-" will show a Tab that takes four spaces as
                               "           ">---".  When omitted, a Tab is show as ^I.
 
-set confirm           "Always confirms before performing an operation which
+"set confirm           "Always confirms before performing an operation which
                       " may produce undesireable consequences (...within reason).
                       " An example would be saving a file before exiting with
                       " a ":q"
@@ -187,6 +190,7 @@ set cursorline                  "Highlights the line the cursor is currently on.
 "set cursorcolumn                "Highlights the column the cursor is currently in. (Sometimes) Useful when checking
                                 " indentation. Here mostly for personal reference
 
+set hidden " I hate those stupid E37 errors when trying to switch from modified buffers
 
 "-------- Mappings
 "Set the map leader...this is the default character, just put it in here
@@ -196,14 +200,6 @@ set cursorline                  "Highlights the line the cursor is currently on.
 let mapleader=','
 
 
-" Allow for moving between windows using <CTRL>+normal vim movement keys (h j k l)
-"Switch to the next "higher" windows with <C-K>
-noremap <C-J> <C-W>j<C-W>_
-"Switch to the next "higher" windows with <C-J>
-noremap <C-K> <C-W>k<C-W>_
-
-map <C-H> <C-W>h
-map <C-L> <C-W>l
 " Allow for quicker management of windows
 " close current split
 map <C-C> <C-W>c
@@ -214,7 +210,8 @@ map <C-X> <C-W>x
 " focus current split (close all other splits)
 map <C-O> <C-W>o
 
-
+" close current buffer but leave window open with another open buffer
+map <leader>cb :b # <BAR> bd #<CR>
 "Hide the highlighted search results with "?"
 "noremap ? :nohlsearch<CR>
 
@@ -303,12 +300,25 @@ map <leader>as :AS<CR>
 
 map <leader>ev :e ~/.vimrc<CR>
 
+
 " Compile and view latex document
 map <leader>lp \ll<CR>\lv<CR>
 
 " Move up and down lines regardless of formatting (move within line wraps)
 nnoremap j gj
 nnoremap k gk
+
+" Allow for moving between windows using <CTRL>+normal vim movement keys (h j k l)
+"Switch to the next "higher" windows with <C-K>
+"noremap <C-J> <C-W>j<C-W>_   " These don't work for me.. the ones below work.
+"Switch to the next "higher" windows with <C-J>
+"noremap <C-K> <C-W>k<C-W>_
+
+map <C-J> <C-W>j
+map <C-K> <C-W>k
+map <C-H> <C-W>h
+map <C-L> <C-W>l
+
 
 " http://blog.ant0ine.com/2007/03/ack_and_vim_integration.html
 " use :cc, :cp, :cn to navigate to the results
@@ -336,10 +346,12 @@ function! s:ToggleScratch()
   endif
 endfunction
 
-map ,s :call <SID>ToggleScratch()<CR>
+map <leader>s :call <SID>ToggleScratch()<CR>
 
 " delete all buffers
 map bda :bufdo bd<CR>
+" delete all trailing whitespace
+map <leader>dw :%s/\s\+$//e<CR>
 
 "-------- Local Overrides
 "If you have options you'd like to override locally for

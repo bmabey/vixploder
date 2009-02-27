@@ -26,6 +26,7 @@ alias gbd='git branch -d'
 alias gbn='git checkout -b '
 alias ga='alias | grep git'
 alias gma='git co master'
+alias gsp='git co sprint'
 alias gco='git checkout '
 alias gm='git merge '
 alias gmd='git merge $1 && git branch -d'
@@ -35,6 +36,7 @@ alias gsl='git stash list'
 #alias gsa='git stash apply'
 alias gt='git tag'
 alias grc='git rebase --continue'
+alias gcam='git commit --amend -C HEAD'
 
 function git_create_tracking_branch {
   git branch --track $1 origin/$1 && git checkout $1
