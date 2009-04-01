@@ -65,7 +65,7 @@ alias dbr="rake db:drop && rake db:create && rake db:migrate && rake db:test:pre
 alias rr="rake routes | grep"
 alias rt="rake -T | grep"
 alias rc="rake cruise:dev"
-alias cuc="cucumber"
+alias cuc="cucumber -r features"
 
 function lri {
  qri $1 | less -R
@@ -106,7 +106,7 @@ complete -o default -o nospace -F _gemdocomplete gemcode
 complete -o default -o nospace -F _gemdocomplete cdgem
 
 
-# Textmate alias that will be rmeoved after we determine that it
+# Textmate alias that will be removed after we determine that it
 # is inferior to vim/vi
 alias mr='mate app config db features lib public test spec vendor/plugins vendor/gems'
 

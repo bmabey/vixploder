@@ -202,10 +202,10 @@ let mapleader=','
 
 " Allow for quicker management of windows
 " close current split
-map <C-C> <C-W>c
+" map <C-C> <C-W>c
 
 " swap splits
-map <C-X> <C-W>x
+" map <C-X> <C-W>x
 
 " focus current split (close all other splits)
 map <C-O> <C-W>o
